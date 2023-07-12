@@ -16,6 +16,8 @@ with open('code.txt') as f:
 #initalize instruction set
 instructions = [] 
 instructionSet = ['>', '<', '+', '-', '.'] # '[', ']'
+pos = 1
+
 
 #seperate instructions into list
 def seperateInstructions(instructions):
@@ -28,7 +30,12 @@ def seperateInstructions(instructions):
     # return list
   return instructions
 
-print(instructions)
+
+def runTimeError(msg):
+  if msg:
+    print(msg)
+  exit()
+
 
 def removeNullSet(instructions):
   # remove new line characters / could rather just ignore any chars and call them strings
@@ -41,6 +48,28 @@ def testRemove(instruction):
   # out = set(instructions) - set(instructionSet)
   return out
 
+def printValue():
+  print(tape[pos])
+
+def incrementValue():
+  tape[pos] += 1
+
+def decrementValue():
+  tape[pos] -= 1
+
+def moveRight():
+  if pos < tapeLength:
+    runTimeError("error: out of tape bounds")
+    exit()
+  else:
+    pos += 1
+
+def moveLeft():
+  if pos > 0:
+    pos -= 1
+  else:
+    runTimeError("error: can't move left")
+
 instructions = seperateInstructions(instructions)
 instructions = testRemove(instructions)
 print(instructions)
@@ -50,7 +79,25 @@ tapeLength = 256
 tape = [0] * tapeLength
 
 while(instructions):
-   print(instructions)
-   instructions.pop(0) #remove first instruction
+  currentOperation = instructions.pop(0) #remove first instruction
+  match currentOperation:
+    case '>':
+      moveRight()
+      break
+    case '<':
+      moveLeft()
+      break
+    case '+':
+      incrementValue()
+      break
+    case '-':
+      decrementValue()
+      break
+    case '.':
+      printValue()
+      break
+   
 
 print("end")
+
+
