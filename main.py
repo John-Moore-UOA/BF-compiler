@@ -15,7 +15,7 @@ with open('code.txt') as f:
 
 #initalize instruction set
 instructions = [] 
-instructionSet = ['>', '<', '+', '-', '.'] # '[', ']'
+instructionSet = ['>', '<', '+', '-', '.', '[', ']']
 
 
 #seperate instructions into list
@@ -41,13 +41,31 @@ def removeNull(instruction):
   # out = set(instructions) - set(instructionSet)
   return out
 
+def checkBalancedBrackets(instruction):
+  openBrackets = 0
+  closeBrackets = 0
 
-instructions = seperateInstructions(instructions)
-instructions = removeNull(instructions)
+  for operation in instruction:
+    if operation == '[':
+      openBrackets = openBrackets + 1
+    elif operation == ']':
+      closeBrackets = closeBrackets + 1
+
+
+  if openBrackets != closeBrackets:
+    runTimeError("error: brackets are not balanced")
+    exit()
+
+instructions = seperateInstructions(instructions) # seperate instructions into list
+instructions = removeNull(instructions) # remove characters that are out of instruction set
+checkBalancedBrackets(instructions) #check if brackets are balanced
+print(instructions)
 
 #define a tape 256 bits
 tapeLength = 256
 tape = [0] * tapeLength
+
+
 
 def printValue(pos):
   print(chr(tape[pos]))
@@ -72,6 +90,7 @@ def moveLeft(pos):
     exit()
   else:
     return pos - 1
+
     
 
 while(len(instructions) != 0):
@@ -89,8 +108,8 @@ while(len(instructions) != 0):
       decrementValue(pos)
     case '.':
       printValue(pos)
-    case _:
-        print("not implemented")
+
+
      
   
 
