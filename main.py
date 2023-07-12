@@ -11,8 +11,7 @@
 
 with open('code.txt') as f:
     lines = f.readlines()
-
-
+    
 #initalize instruction set
 instructions = [] 
 instructionSet = ['>', '<', '+', '-', '.', '[', ']']
@@ -59,7 +58,6 @@ def checkBalancedBrackets(instruction):
 instructions = seperateInstructions(instructions) # seperate instructions into list
 instructions = removeNull(instructions) # remove characters that are out of instruction set
 checkBalancedBrackets(instructions) #check if brackets are balanced
-print(instructions)
 
 #define a tape 256 bits
 tapeLength = 256
@@ -68,7 +66,8 @@ tape = [0] * tapeLength
 
 
 def printValue(pos):
-  print(chr(tape[pos]))
+  print(chr(tape[pos]), end="")
+  # print(tape[: 8])
 
 def incrementValue(pos):
   tape[pos] += 1
@@ -90,12 +89,25 @@ def moveLeft(pos):
     exit()
   else:
     return pos - 1
-
+  
+  currentValue = tape[pos] # when current value is 0, exit loop, pick up instruction set until end of loop
+def loopInstructions(innerInstructions, pos, currentValue):
+  # loop through instructions until tape[pos] == 0
+  loopPos = pos
+  wolf = 0
+  while(tape[loopPos] != 0):
     
 
-while(len(instructions) != 0):
-  currentOperation = instructions.pop(0) #remove first instruction
-  pos = 1 #bit pointer
+    for currentOperation in innerInstructions:
+      pos = activeInstruction(currentOperation, pos)
+      # print(tape[: 8])
+
+      wolf = wolf + 1
+      if wolf == 100:
+        runTimeError("error: infinite loop?")
+        exit()
+
+def activeInstruction(currentOperation, pos):
 
   match currentOperation:
     case '>':
@@ -108,6 +120,21 @@ while(len(instructions) != 0):
       decrementValue(pos)
     case '.':
       printValue(pos)
+    case '[':
+        innerInstructions = []
+        currentOperation = instructions.pop(0)
+        while(currentOperation != ']'):
+          innerInstructions.append(currentOperation)
+          currentOperation = instructions.pop(0)
+        loopInstructions(innerInstructions, pos, tape[pos]) 
+  
+  return pos  
+      
+pos = 0 #bit pointer
+
+while(len(instructions) != 0):
+  currentOperation = instructions.pop(0) #remove first instruction
+  pos = activeInstruction(currentOperation, pos)
 
 
      
