@@ -16,7 +16,6 @@ with open('code.txt') as f:
 #initalize instruction set
 instructions = [] 
 instructionSet = ['>', '<', '+', '-', '.'] # '[', ']'
-pos = 1
 
 
 #seperate instructions into list
@@ -37,67 +36,63 @@ def runTimeError(msg):
   exit()
 
 
-def removeNullSet(instructions):
-  # remove new line characters / could rather just ignore any chars and call them strings
-  out = list(filter(('\n').__ne__, instructions))
-  out = list(filter((' ').__ne__, out))
-  return out
-
-def testRemove(instruction):
+def removeNull(instruction):
   out = [x for x in instruction if x  in instructionSet]
   # out = set(instructions) - set(instructionSet)
   return out
 
-def printValue():
-  print(tape[pos])
-
-def incrementValue():
-  tape[pos] += 1
-
-def decrementValue():
-  tape[pos] -= 1
-
-def moveRight():
-  if pos < tapeLength:
-    runTimeError("error: out of tape bounds")
-    exit()
-  else:
-    pos += 1
-
-def moveLeft():
-  if pos > 0:
-    pos -= 1
-  else:
-    runTimeError("error: can't move left")
 
 instructions = seperateInstructions(instructions)
-instructions = testRemove(instructions)
-print(instructions)
+instructions = removeNull(instructions)
 
 #define a tape 256 bits
 tapeLength = 256
 tape = [0] * tapeLength
 
-while(instructions):
+def printValue(pos):
+  print(chr(tape[pos]))
+
+def incrementValue(pos):
+  tape[pos] += 1
+
+def decrementValue(pos):
+  tape[pos] -= 1
+
+
+def moveRight(pos):
+  if pos > tapeLength:
+    runTimeError("error: out of tape bounds")
+    exit()
+  else:
+    return pos + 1 
+
+def moveLeft(pos):
+  if pos < 1:
+    runTimeError("error: can't move left")
+    exit()
+  else:
+    return pos - 1
+    
+
+while(len(instructions) != 0):
   currentOperation = instructions.pop(0) #remove first instruction
+  pos = 1 #bit pointer
+
   match currentOperation:
     case '>':
-      moveRight()
-      break
+      pos = moveRight(pos)
     case '<':
-      moveLeft()
-      break
+      pos = moveLeft(pos)
     case '+':
-      incrementValue()
-      break
+      incrementValue(pos)
     case '-':
-      decrementValue()
-      break
+      decrementValue(pos)
     case '.':
-      printValue()
-      break
-   
+      printValue(pos)
+    case _:
+        print("not implemented")
+     
+  
 
-print("end")
 
 
