@@ -103,7 +103,7 @@ def loopInstructions(innerInstructions, pos, currentValue):
       # print(tape[: 8])
 
       wolf = wolf + 1
-      if wolf == 100:
+      if wolf == 100000:
         runTimeError("error: infinite loop?")
         exit()
 
