@@ -20,16 +20,16 @@ BF is a simple language of { + - > < . [ ] } along a tape of some length
 
 
 74
-\>++++++[>++++++++++++<-]>++.
+\>++++++[>++++++++++++<-]>++.   => J
 
 79
-\>++++++[>+++++++++++++<-]>+.
+\>++++++[>+++++++++++++<-]>+.   => O
 
 72
-\>++++++[>++++++++++++<-]>.
+\>++++++[>++++++++++++<-]>.     => H
 
 78
-\>++++++[>+++++++++++++<-]>.
+\>++++++[>+++++++++++++<-]>.    => N
 
 
 Example: 
@@ -43,7 +43,7 @@ Pseudo-Code:
 + move foward to cell 2 and decrement
 + Repeat until cell 2 value is 0
 + Shift to cell 2 increment +2
-+ print output in cell 2
++ print ASCII value of cell 2
 
 
 
